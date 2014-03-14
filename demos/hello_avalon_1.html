@@ -1,0 +1,18 @@
+<html>
+<head>
+<script src="avalon.js"></script>
+</head>
+<body>
+<div ms-controller="hello">
+<h1>Hello, {{name}}</h1>
+</div>
+<script>
+avalon.ready(function() {
+    var model = avalon.define('hello', function(vm){
+        vm.name = 'Avalon';
+    });
+    avalon.scan();
+});
+</script>
+</body>
+</html>

@@ -18,7 +18,7 @@ templates = {'index':'index.html', '*':'default.html'}
 tag_class = {
     
 'table':'ui collapsing celled table segment',
-'pre':'prettyprint',
+'pre':'+prettyprint',
 
 }
 
@@ -37,7 +37,7 @@ introduction = u'''
 <h1 class="ui header">%s
 <a class="ui black label">%s</a>
 </h1>
-<h2 class="ui header">Your project shows description here.</h2>
+<h2 class="ui header">帮助你在学习 Avalon 时快速入门</h2>
 ''' % (project, version)
 
 # You can add custom css files, just like

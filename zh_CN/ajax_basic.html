@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./static/parm.css"/>
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 
-<title>如何获得本教程 HTML 文档 - Avalon Learning</title>
+<title>使用 Ajax 获取数据 - Avalon Learning</title>
 </head>
 <body>
 
@@ -58,28 +58,58 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./ajax_basic.html"><i class="icon-arrow-left"></i> 使用 Ajax 获取数据</a>
+    <a prev-chapter href="./filter.html"><i class="icon-arrow-left"></i> 使用 filter</a>
 </div>
-
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+</div>
         
-        <h1 id="title_1">如何获得本教程 HTML 文档<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">手工转換<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>本文档使用 par 和 parm 项目转換而成。因此如果要手工转換，需要安装相关的包。因为 par, parm都是使用Python语言编写，所以你需要安装以下环境：</p>
+        <h1 id="title_1">使用 Ajax 获取数据<a class="anchor" href="#title_1">&para;</a></h1>
+<p>前面的例子是直接把数据写在HTML页面中，那么在实例的运行环境中，一种是通过后台模 板的方式，将数据直接生成，所以也可以形成这个效果。这种做法更多是考虑后台生成前 端展示页面的形式，前后台分离不明显。前后台分离的做法，更多是通过ajax方式来获得 数据。那么下面我们来尝试一下。</p>
+<h2 id="title_1-1">定义数据文件<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>因为这只是一个 Demo ，所以我们并不直接实现后台服务，所以我们把数据通过定义为 json 数据，然后通过 ajax 来读取它，来模拟实际的处理。</p>
+<pre class="prettyprint "><code>{"subject": "Blog Title","author": "张三","publish_date": "2014/3/15","comment_count": 0,"content": "&lt;h2&gt;这是一个测试的博客&lt;/h2&gt;&lt;p&gt;这是内容 1&lt;/p&gt;&lt;p&gt;这是内容 2&lt;/p&gt;&lt;p&gt;这是内容 3&lt;/p&gt;&lt;p&gt;这是内容 4&lt;/p&gt;"}</code></pre>
+
+<div class="ui warning message">
+<p>因为json文件中包含中文，所以我们应该将其保存为 utf8 编码，以防止显示时乱码。同时 要注意生成的json文件格式一定要正确，不然后面的解析有可能会出错。如果想试验是否 正确，可以在 chrome/firefox 的 console 中使用:</p>
+<pre class="prettyprint "><code>JSON.parse(json_string)</code></pre>
+<p>如果成功就没问题。上面的数据如果为了好看定义成多行，就有问题。</p>
+
+</div>
+<h2 id="title_1-2">Ajax 库的选择<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>伴随着 avalon，作者司徒正美还开发了其它的 js 库，如： <a href="https://github.com/RubyLouvre/mmRequest" class="outter">mmRequest</a>, <a href="https://github.com/RubyLouvre/mmDeferred" class="outter">mmDeffered</a> 等， 其中 mmRequest 就是可以实现 jquery 的 ajax 功能。不过这些库本身没有放在 avalon  的源码中，所以要使用它们还要单独下载源码。这里我先 使用 jquery 。而且在前面的例子中，因为使用sementic-ui，它本身就需要安装 jquery， 所以我们已经不再需要加入新的 js 文件了。</p>
+<h2 id="title_1-3">获取数据<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>我们这个页面实际上只在展示时获取一次数据，因此，可以直接在 Model 定义之外直接 从后台读取数据，然后修改 Model 实例中对应的属性。代码为：</p>
+<pre class="prettyprint linenums"><code>...
+&lt;script&gt;
+var model = avalon.define("blog", function(vm){
+    vm.blog = {};
+});
+
+$(function(){
+    $.getJSON('blog_info.json').done(function(data){
+        model.blog = data;
+    });
+});
+&lt;/script&gt;
+...</code></pre>
+
+<p>从上面的代码可以看出， <code>vm.blog = {}</code> ，内容没有直接定义出来。</p>
+<p>通过 jquery 的 <code>$.getJSON()</code> 来获得数据，并且在 <code>done()</code> (即success回调)中将数据 绑定到 <code>model.blog</code> 上。这里有一点很重要，我们不能在 Model 外面直接操作 <code>vm</code> ，所 以要通过 <code>model</code> 对象。从 Avalon 的角度， <code>vm</code> 是用来定义的，而 <code>model</code> 是真正可 以操作的对象。不过如果在 Model 定义的内部，直接使用 <code>vm</code> 一般也没有什么大问题。 不过，心里要清楚它们其实是不同的东西。</p>
+<h2 id="title_1-4">观看演示代码<a class="anchor" href="#title_1-4">&para;</a></h2>
 <ul>
-<li>python 2.6+(建议 2.7.6)</li>
-<li>安装 setuptools</li>
-<li>安装 pip</li>
+<li><a href="../demos/ajax_basic.html" class="inner">演示代码1 demos/ajax_basic.html</a></li>
 </ul>
-<p>然后通过:</p>
-<pre class="prettyprint "><code>pip install parm</code></pre>
-<p>安装成功之后，再下载本项目的代码，然后运行项目目录下的 <code>make.bat</code> 或 <code>make.sh</code>( 如果权限不够可能还要修改执行权限)</p>
-<p>在执行时会自动在项目目录的同级创建一个名字 <code>avalon-learning-static</code> 的目录，双击 它下面的 <code>index.html</code> 就可以了。</p>
-<h2 id="title_1-2">直接下载<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>在github项目主页上，切換分支到 <code>gh-pages</code> 上，然后在右侧的下载中点击 <code>Downlaod ZIP</code> . 解压后，点击 <code>index.html</code> 就可以了。或者点击 <a href="https://github.com/limodou/avalon-learning/archive/gh-pages.zip" class="outter">这里</a>  下载当前最新文档。</p>
+<h2 id="title_1-5">参考文档<a class="anchor" href="#title_1-5">&para;</a></h2>
+<ul>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top27" class="outter">AJAX</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top27" class="outter">Avalon 最佳实践</a>
+ 其中有一些关于 Model 应如何定义，以及定义用的 vm 与返回后的对象的区别</li>
+</ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./howto_build.md">View Source</a>
+            <i class="icon download"></i><a href="./ajax_basic.md">View Source</a>
         </div>
         
     </div>

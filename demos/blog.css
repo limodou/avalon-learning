@@ -1,0 +1,13 @@
+html, body {margin:0;height:100%;padding:0;background-color:whitesmoke;}
+.head {color:white;height:120px;border-top:4px solid #59636c;background-color:#263346;position:relative;}
+.head h1.ui.header {font-size:3em;margin-top:20px;font-family:Bebas-Neue, serif;text-align:center;margin-top:20px;}
+.head h1.ui.header .sub.header {color:#ccc;}
+#blogs {background-color:white;width:90%; margin:0 auto;top:0;}
+.footer {text-align:center;}
+.blog-body {position:relative;}
+.blog-content a.anchor {color:white;text-decoration:none;}
+.blog-content pre {background-color:whitesmoke;font-size:1em;padding:4px;border-left:4px solid brown;overflow:auto;}
+.blog-content img {max-width:100%;}
+.blog h2.ui.header {margin-top:0.5em;}
+.blog h2.ui.header a {color:black;text-decoration:none;}
+.blog h2.ui.header a:hover {text-decoration:underline;}

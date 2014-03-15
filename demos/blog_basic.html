@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../zh_CN/static/semantic/css/semantic.min.css"/>
+<script type="text/javascript" src="../zh_CN/static/semantic/javascript/semantic.min.js"></script>
+<link rel="stylesheet" type="text/css" href="blog.css"/>
+<title>Avalon Learning Blog</title>
+</head>
+<body>
+<!-- HEADER -->
+<div class="head">
+    <h1 class="ui header">Avalon Learning Blog
+        <div class="sub header">带你快速走进 Avalon 的世界</div>
+    </h1>
+</div>
+<!-- Blog正文 -->
+<div class="ui attached bottom segment" id="blogs">
+    <div class="ui stacked segment blog">
+        <div class="blog-body">
+        <h2 class="ui header">
+            <div class="content">
+                {{subject}}
+                <div class="sub header">{{author}} • {{publish_date}} • <span class="ui label"><i class="comment icon"></i> {{comment_count}}</span></div>
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="blog-content">{{content}}</div>
+    </div>
+</div>
+</body>
+</html>

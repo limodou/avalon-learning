@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./static/parm.css"/>
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 
-<title>如何获得本教程 HTML 文档 - Avalon Learning</title>
+<title>使用 filter - Avalon Learning</title>
 </head>
 <body>
 
@@ -58,28 +58,49 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./filter.html"><i class="icon-arrow-left"></i> 使用 filter</a>
+    <a prev-chapter href="./blog_basic.html"><i class="icon-arrow-left"></i> Blog 基本内容展示</a>
 </div>
-
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+</div>
         
-        <h1 id="title_1">如何获得本教程 HTML 文档<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">手工转換<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>本文档使用 par 和 parm 项目转換而成。因此如果要手工转換，需要安装相关的包。因为 par, parm都是使用Python语言编写，所以你需要安装以下环境：</p>
+        <h1 id="title_1">使用 filter<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">介绍<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>在上一章我们看到日期和内容不是我们预期的，所以我们需要对它们进行处理。在 Avalon 中可以很方便地使用 filter 来进行处理。</p>
+<p>filter 可以用在插值表达式之后（还记得插值表达式吗？就是 <code>{{}}</code> 这样的内容），对 前面输出的结果进行再加工的函数。</p>
+<p>它的写法是：</p>
+<pre class="prettyprint "><code>{{ expression | filter }}</code></pre>
+<p>在 Avalon 中已经预定义了许多实用的 filter ，可以查看 <a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter</a>
+  的文档了解更多。</p>
+<h2 id="title_1-2">date 和 html<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>这里面对我们有用的是两个: <code>date</code> 和 <code>html</code></p>
+<p>其中 <code>date</code> 可以将一个日期字段转換为各种格式，所以我们可以将 <code>{{publish_date}}</code> 改为 <code>{{publish_date|date('yyyy-mm-dd')}}</code> 。</p>
+<p><code>html</code> 则可以将文本不进行转义处理。缺省情况下，插件表达式的结果会自动进行转义。 所以我们将 <code>{{content}}</code> 改为 <code>{{content|html}}</code> 。修改后再查看页面，结果为：</p>
+<h2 id="title_1-3">显示结果<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p><img src="images/filter.png"/>
+</p>
+<h2 id="title_1-4">自定义 filter<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>如果 Avalon 提供的 filter 不能满足我们的要求，我们也可以自定义 filter。</p>
+<p>一个基本的 filter 定义格式为：</p>
+<pre class="prettyprint "><code>avalon.filters.myfilter = function(str, arg1, arg2, ...){
+    return result;
+}</code></pre>
+<p>从上面的定义可以看出，第一个参数 <code>str</code> 就是前面返回的结果。除了第一个参数必须要 定义外，你还可以定义额外的参数，如前面的 <code>date</code> 就需要一个格式串。根据 filter 有没有参数，在使用它时，可以类似于函数调用，如 <code>{{publish_date|date('yyyy-mm-dd')}}</code> 也可以只是 个名字，如 <code>{{content|html}}</code> 。</p>
+<h2 id="title_1-5">filter 连用<a class="anchor" href="#title_1-5">&para;</a></h2>
+<p>在复杂情况下，filter还可以连用，如：</p>
+<pre class="prettyprint "><code>{{ prop | filter1 | filter2 | filter3(args, args2) | filter4(args)}}</code></pre>
+<h2 id="title_1-6">观看演示代码<a class="anchor" href="#title_1-6">&para;</a></h2>
 <ul>
-<li>python 2.6+(建议 2.7.6)</li>
-<li>安装 setuptools</li>
-<li>安装 pip</li>
+<li><a href="../demos/filter.html" class="inner">演示代码1 demos/filter.html</a></li>
 </ul>
-<p>然后通过:</p>
-<pre class="prettyprint "><code>pip install parm</code></pre>
-<p>安装成功之后，再下载本项目的代码，然后运行项目目录下的 <code>make.bat</code> 或 <code>make.sh</code>( 如果权限不够可能还要修改执行权限)</p>
-<p>在执行时会自动在项目目录的同级创建一个名字 <code>avalon-learning-static</code> 的目录，双击 它下面的 <code>index.html</code> 就可以了。</p>
-<h2 id="title_1-2">直接下载<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>在github项目主页上，切換分支到 <code>gh-pages</code> 上，然后在右侧的下载中点击 <code>Downlaod ZIP</code> . 解压后，点击 <code>index.html</code> 就可以了。或者点击 <a href="https://github.com/limodou/avalon-learning/archive/gh-pages.zip" class="outter">这里</a>  下载当前最新文档。</p>
+<h2 id="title_1-7">参考文档<a class="anchor" href="#title_1-7">&para;</a></h2>
+<ul>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter文档</a></li>
+</ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./howto_build.md">View Source</a>
+            <i class="icon download"></i><a href="./filter.md">View Source</a>
         </div>
         
     </div>

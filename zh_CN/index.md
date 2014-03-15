@@ -12,6 +12,11 @@ howto_build.md
 
 本文档全部内容都放在github上，欢迎访问 https://github.com/limodou/avalon-learning
 
+## 更新记录
+
+* 2014-03-15 添加disqus评论和搜索支持
+* 2014-03-14 初始版本发布，増加 “获得源码”，“Hello, Avalon”章节，搭建教程环境
+
 ## Avalon 相关资源
 
 * 项目地址 https://github.com/RubyLouvre/avalon

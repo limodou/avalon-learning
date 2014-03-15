@@ -67,14 +67,14 @@ download_source = 'View Source'
 #there are also bootstrap, semantic support
 theme = 'semantic'
 
-disqus = ''
+disqus = 'avalonlearning'
 
 #disqus support
 #this use uliwebdoc, so you should replace it with your account name
 disqus_text = '''<div id="disqus_thread" style="margin:20px;"></div>
  <script type="text/javascript">
      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-     var disqus_shortname = ''; // required: replace example with your forum shortname
+     var disqus_shortname = '%s'; // required: replace example with your forum shortname
 
      /* * * DON'T EDIT BELOW THIS LINE * * */
      (function() {
@@ -85,12 +85,12 @@ disqus_text = '''<div id="disqus_thread" style="margin:20px;"></div>
  </script>
  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-'''
+''' % disqus
 
 #this use uliwebdoc, so you should replace it with your account name
 disqus_js = '''<script type="text/javascript">
    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-   var disqus_shortname = ''; // required: replace example with your forum shortname
+   var disqus_shortname = '%s'; // required: replace example with your forum shortname
 
    /* * * DON'T EDIT BELOW THIS LINE * * */
    (function () {
@@ -100,10 +100,10 @@ disqus_js = '''<script type="text/javascript">
        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
    }());
    </script>
-'''
+''' % disqus
 
 search = True
-domain = ''
+domain = 'limodou.github.io/avalon-learning/zh_CN'
 search_html = """
 <div class="item">
   <div class="ui icon input">

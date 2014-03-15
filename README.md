@@ -1,4 +1,4 @@
-Avalong Learning
+Avalon Learning
 -------------------
 
 这是一个关于Avalon学习和使用的入门教程，欢迎大家参与。

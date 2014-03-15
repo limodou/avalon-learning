@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../zh_CN/static/semantic/css/semantic.min.css"/>
+<script type="text/javascript" src="../zh_CN/static/semantic/javascript/semantic.min.js"></script>
+<link rel="stylesheet" type="text/css" href="blog.css"/>
+<script src="avalon.js"></script>
+<title>Avalon Learning Blog</title>
+</head>
+<body>
+<!-- HEADER -->
+<div class="head">
+    <h1 class="ui header">Avalon Learning Blog
+        <div class="sub header">带你快速走进 Avalon 的世界</div>
+    </h1>
+</div>
+<!-- Blog正文 -->
+<div class="ui attached bottom segment" id="blogs" ms-controller="blog">
+    <div class="ui stacked segment blog">
+        <div class="blog-body">
+        <h2 class="ui header">
+            <div class="content">
+                {{blog.subject}}
+                <div class="sub header">{{blog.author}} • {{blog.publish_date|date('yyyy-mm-dd')}} • <span class="ui label"><i class="comment icon"></i> {{blog.comment_count}}</span></div>
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="blog-content">{{blog.content|html}}</div>
+    </div>
+</div>
+<script>
+var model = avalon.define("blog", function(vm){
+    vm.blog = {};
+});
+
+$(function(){
+    $.getJSON('blog_info.json').done(function(data){
+        model.blog = data;
+    });
+});
+</script>
+</body>
+</html>

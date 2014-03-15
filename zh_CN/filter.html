@@ -74,7 +74,12 @@
   的文档了解更多。</p>
 <h2 id="title_1-2">date 和 html<a class="anchor" href="#title_1-2">&para;</a></h2>
 <p>这里面对我们有用的是两个: <code>date</code> 和 <code>html</code></p>
-<p>其中 <code>date</code> 可以将一个日期字段转換为各种格式，所以我们可以将 <code>{{publish_date}}</code> 改为 <code>{{publish_date|date('yyyy-mm-dd')}}</code> 。</p>
+<p>其中 <code>date</code> 可以将一个日期字段转換为各种格式，所以我们可以将 <code>{{publish_date}}</code> 改为 <code>{{publish_date|date('yyyy-MM-dd')}}</code> 。</p>
+<div class="ui info message">
+<p>这里月是使用 <code>MM</code> ，而 <code>mm</code> 表示分钟。对于日期的取值 Avalon 很灵活，可以支持很多 种情况，如： Date 对象， '2014/03/15' 等多种字符串格式。详细参见关于 <a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter</a>
+ 文档中关于 date 的描述。</p>
+
+</div>
 <p><code>html</code> 则可以将文本不进行转义处理。缺省情况下，插件表达式的结果会自动进行转义。 所以我们将 <code>{{content}}</code> 改为 <code>{{content|html}}</code> 。修改后再查看页面，结果为：</p>
 <h2 id="title_1-3">显示结果<a class="anchor" href="#title_1-3">&para;</a></h2>
 <p><img src="images/filter.png"/>

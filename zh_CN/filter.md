@@ -22,7 +22,13 @@ filter 可以用在插值表达式之后（还记得插值表达式吗？就是 
 这里面对我们有用的是两个: `date` 和 `html`
 
 其中 `date` 可以将一个日期字段转換为各种格式，所以我们可以将 `{{publish_date}}`
-改为 `{{publish_date|date('yyyy-mm-dd')}}` 。
+改为 `{{publish_date|date('yyyy-MM-dd')}}` 。
+
+{% alert class=info %}
+这里月是使用 `MM` ，而 `mm` 表示分钟。对于日期的取值 Avalon 很灵活，可以支持很多
+种情况，如： Date 对象， '2014/03/15' 等多种字符串格式。详细参见关于 [filter][1]
+文档中关于 date 的描述。
+{% endalert %}
 
 `html` 则可以将文本不进行转义处理。缺省情况下，插件表达式的结果会自动进行转义。
 所以我们将 `{{content}}` 改为 `{{content|html}}` 。修改后再查看页面，结果为：

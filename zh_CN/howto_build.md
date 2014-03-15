@@ -1,4 +1,4 @@
-# 如何获得HTML文档
+# 如何获得本教程 HTML 文档
 
 ## 手工转換
 
@@ -24,4 +24,5 @@ pip install parm
 ## 直接下载
 
 在github项目主页上，切換分支到 `gh-pages` 上，然后在右侧的下载中点击 `Downlaod ZIP` .
-解压后，点击 `index.html` 就可以了。
+解压后，点击 `index.html` 就可以了。或者点击 [这里](https://github.com/limodou/avalon-learning/archive/gh-pages.zip) 
+下载当前最新文档。

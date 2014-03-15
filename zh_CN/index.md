@@ -7,6 +7,7 @@
 {% toc max_depth=1 %}
 installation.md
 hello_avalon.md
+blog_basic.md
 howto_build.md
 {% endtoc %}
 
@@ -14,7 +15,7 @@ howto_build.md
 
 ## 更新记录
 
-* 2014-03-15 添加disqus评论和搜索支持
+* 2014-03-15 添加disqus评论和搜索支持，増加 “Blog 基本内容展示”章节
 * 2014-03-14 初始版本发布，増加 “获得源码”，“Hello, Avalon”章节，搭建教程环境
 
 ## Avalon 相关资源

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./static/parm.css"/>
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 
-<title>如何获得本教程 HTML 文档 - Avalon Learning</title>
+<title>使用 $watch 监视变化 - Avalon Learning</title>
 </head>
 <body>
 
@@ -58,28 +58,53 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./watch.html"><i class="icon-arrow-left"></i> 使用 $watch 监视变化</a>
+    <a prev-chapter href="./comments.html"><i class="icon-arrow-left"></i> 评论处理</a>
 </div>
-
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+</div>
         
-        <h1 id="title_1">如何获得本教程 HTML 文档<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">手工转換<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>本文档使用 par 和 parm 项目转換而成。因此如果要手工转換，需要安装相关的包。因为 par, parm都是使用Python语言编写，所以你需要安装以下环境：</p>
+        <h1 id="title_1">使用 $watch 监视变化<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">问题<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>细心的朋友也许会发现，下面的评论总条数与上面的评论条数并不一致。是不是有可能： 当下面的评论条数变化时，上面也自动变化呢？</p>
+<p>答案是肯定的！</p>
+<h2 id="title_1-2">添加 $watch 处理<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>让我们在 <code>&lt;script&gt;</code> 中添加以下代码:</p>
+<pre class="prettyprint linenums"><code>...
+// begin of watch
+comments.comments.$watch('length', function(v){
+    model.blog.comment_count = v;
+});
+...</code></pre>
+
+<p>在上面的代码中，根据新的评论条数来修改 <code>model</code> 中的 <code>comment_count</code> 的值。</p>
+<p>然后再看页面，条数已经同步了。</p>
+<h2 id="title_1-3">$watch 介绍<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p><code>$watch</code> 可以用来监视 Model 中对象，以及对象的某些属性的变化，当变化时， Avalon 会自动调用相应的 <code>$watch</code> 函数。一个 <code>$watch</code> 函数定义为：</p>
+<pre class="prettyprint "><code>vm.$watch('prop', function(value, oldValue){
+});</code></pre>
+<p>其中，value是变化后的值，oldValue是变化前的值。</p>
+<p>根据属性在 Model 中存在的“层数”不同（层数的概念见下面），要在不同的对象上引用 <code>$watch</code> 方法与某个属性名进行绑定。所以上面的代码，就是绑定了 <code>vm</code> 下的 <code>prop</code> 属 性。如果有多层（层数越少越好，否则后果难以遇料，尽量将数据扁平化），则需要使用</p>
+<pre class="prettyprint "><code>model.prop.$watch('name', function(value, oldValue){
+});</code></pre>
+<p>类似这种写法。</p>
+<h2 id="title_1-4">不同层次 $watch 的处理<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>根据数据组织的复杂程度，可以将数据分为不同的层次。比如 <code>vm.name</code> 这里 <code>name</code> 就算 是第一层。 <code>vm.array = []</code> ，这里 <code>array</code> 也是第一层，但是它的长度 <code>length</code> 就 算是第二层。简单理解，就是用几个 <code>.</code> 来引用就是几层（不准确，只是便于理解）。</p>
+<p>那么根据 Avalon 中关于 $watch 的描述，对于二层以上的，需要在 Model 定义之外，对 返回的 Model 对象（注意不是定义用的 <code>vm</code> 对象）使用 <code>$watch</code> 定义。所以，我们上 面的代码就是写在 Model 定义之外的，并且使用 <code>model</code> 这个对象。</p>
+<h2 id="title_1-5">使用 $watch 的时机<a class="anchor" href="#title_1-5">&para;</a></h2>
+<p>也许你在考虑：我在进行评论操作时，同时修改 Blog 的评论数不是一样吗？的确，可以做 到。但是，评论数的变化会存在多个地方，比如：数据装入，添加，删除等。这样至少你 需要在这几个地方都添加相同的同步评论数的处理代码。这样很不方便。而同步评论数的 真正来源正是评论的总条数，因此只要它变化，进行同步就对了。所以，以数据为中心， 抓住关键的变化源进行非主动式同步（就是不在执行某些操作时进行同步），这种方式是 最适合使用 <code>$watch</code> 来处理的。或者你可以理解为使用 <code>$watch</code> 适合进行间接的处理。</p>
+<h2 id="title_1-6">观看演示代码<a class="anchor" href="#title_1-6">&para;</a></h2>
 <ul>
-<li>python 2.6+(建议 2.7.6)</li>
-<li>安装 setuptools</li>
-<li>安装 pip</li>
+<li><a href="../demos/watch.html" class="inner">演示代码1 demos/watch.html</a></li>
 </ul>
-<p>然后通过:</p>
-<pre class="prettyprint "><code>pip install parm</code></pre>
-<p>安装成功之后，再下载本项目的代码，然后运行项目目录下的 <code>make.bat</code> 或 <code>make.sh</code>( 如果权限不够可能还要修改执行权限)</p>
-<p>在执行时会自动在项目目录的同级创建一个名字 <code>avalon-learning-static</code> 的目录，双击 它下面的 <code>index.html</code> 就可以了。</p>
-<h2 id="title_1-2">直接下载<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>在github项目主页上，切換分支到 <code>gh-pages</code> 上，然后在右侧的下载中点击 <code>Downlaod ZIP</code> . 解压后，点击 <code>index.html</code> 就可以了。或者点击 <a href="https://github.com/limodou/avalon-learning/archive/gh-pages.zip" class="outter">这里</a>  下载当前最新文档。</p>
+<h2 id="title_1-7">参考文档<a class="anchor" href="#title_1-7">&para;</a></h2>
+<ul>
+<li><a href="http://rubylouvre.github.io/mvvm/avalon.watch.html" class="outter">$watch</a></li>
+</ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./howto_build.md">View Source</a>
+            <i class="icon download"></i><a href="./watch.md">View Source</a>
         </div>
         
     </div>

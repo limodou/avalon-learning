@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 <link rel="stylesheet" href="./static/ui.totop.css"/>
 
-<title>使用 filter - Avalon Learning</title>
+<title>事件处理-删除操作 - Avalon Learning</title>
 </head>
 <body>
 
@@ -59,54 +59,52 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./blog_basic.html"><i class="icon-arrow-left"></i> Blog 基本内容展示</a>
+    <a prev-chapter href="./watch.html"><i class="icon-arrow-left"></i> 使用 $watch 监视变化</a>
 </div>
 <div class="chapter-next chapter-top">
-    <a next-chapter href="./ajax_basic.html">使用 Ajax 获取数据 <i class="icon-arrow-right"></i></a>
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
 </div>
         
-        <h1 id="title_1">使用 filter<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">介绍<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>在上一章我们看到日期和内容不是我们预期的，所以我们需要对它们进行处理。在 Avalon 中可以很方便地使用 filter 来进行处理。</p>
-<p>filter 可以用在插值表达式之后（还记得插值表达式吗？就是 <code>{{}}</code> 这样的内容），对 前面输出的结果进行再加工的函数。</p>
-<p>它的写法是：</p>
-<pre class="prettyprint "><code>{{ expression | filter }}</code></pre>
-<p>在 Avalon 中已经预定义了许多实用的 filter ，可以查看 <a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter</a>
-  的文档了解更多。</p>
-<h2 id="title_1-2">date 和 html<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>这里面对我们有用的是两个: <code>date</code> 和 <code>html</code></p>
-<p>其中 <code>date</code> 可以将一个日期字段转換为各种格式，所以我们可以将 <code>{{publish_date}}</code> 改为 <code>{{publish_date|date('yyyy-MM-dd')}}</code> 。</p>
-<div class="ui info message">
-<p>这里月是使用 <code>MM</code> ，而 <code>mm</code> 表示分钟。对于日期的取值 Avalon 很灵活，可以支持很多 种情况，如： Date 对象， '2014/03/15' 等多种字符串格式。详细参见关于 <a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter</a>
- 文档中关于 date 的描述。</p>
+        <h1 id="title_1">事件处理-删除操作<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">需求描述<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>有时我们会发现，评论的内容属于垃圾信息，因此需要将其删除。因此，我希望在查看评论 时，有一个删除的链接，点击后可以让我把它删除。</p>
+<p>这个需求比较简单，删除标签在前面已经有了，所以可以直接使用。在删除后，因为评论条 数变化，所以应该两个显示都发生变化，一会我们看随后的结果是不是正确。</p>
+<h2 id="title_1-2">ms-click<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>Avalon 中提供了大量的事件响应处理的属性，其中 <code>ms-click</code> 就是用来处理点击的属性。 我们修改：</p>
+<pre class="prettyprint "><code>&lt;a class="delete"&gt;Delete&lt;/a&gt;</code></pre>
+<p>为:</p>
+<pre class="prettyprint linenums"><code>...
+          &lt;a class="delete" ms-click="remove(el)"&gt;Delete&lt;/a&gt;
+...</code></pre>
+
+<p>在 <code>ms-click</code> 后面是一个回调函数 <code>remove</code> 。如果这个回调没有参数，则可以不带括号。如果带 参数则传入相应的参数即可。这里传入了循环变量 <code>el</code> 。</p>
+<div class="ui warning message">
+<p>请注意，函数命名不要使用关键字，如 <code>delete</code> 等，否则会冲突。</p>
 
 </div>
-<p><code>html</code> 则可以将文本不进行转义处理。缺省情况下，插件表达式的结果会自动进行转义。 所以我们将 <code>{{content}}</code> 改为 <code>{{content|html}}</code> 。修改后再查看页面，结果为：</p>
-<h2 id="title_1-3">显示结果<a class="anchor" href="#title_1-3">&para;</a></h2>
-<p><img src="images/filter.png"/>
-</p>
-<h2 id="title_1-4">自定义 filter<a class="anchor" href="#title_1-4">&para;</a></h2>
-<p>如果 Avalon 提供的 filter 不能满足我们的要求，我们也可以自定义 filter。</p>
-<p>一个基本的 filter 定义格式为：</p>
-<pre class="prettyprint "><code>avalon.filters.myfilter = function(str, arg1, arg2, ...){
-    return result;
-}</code></pre>
-<p>从上面的定义可以看出，第一个参数 <code>str</code> 就是前面返回的结果。除了第一个参数必须要 定义外，你还可以定义额外的参数，如前面的 <code>date</code> 就需要一个格式串。根据 filter 有没有参数，在使用它时，可以类似于函数调用，如 <code>{{publish_date|date('yyyy-mm-dd')}}</code> 也可以只是 个名字，如 <code>{{content|html}}</code> 。</p>
-<h2 id="title_1-5">filter 连用<a class="anchor" href="#title_1-5">&para;</a></h2>
-<p>在复杂情况下，filter还可以连用，如：</p>
-<pre class="prettyprint "><code>{{ prop | filter1 | filter2 | filter3(args, args2) | filter4(args)}}</code></pre>
-<h2 id="title_1-6">观看演示代码<a class="anchor" href="#title_1-6">&para;</a></h2>
+<h2 id="title_1-3">定义回调<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>然后让我们在 <code>comments</code> Model 中定义对应的 <code>remove</code> 函数，如：</p>
+<pre class="prettyprint linenums"><code>...
+    //begin of remove
+    vm.remove = function(el){
+        vm.comments.remove(el);
+    }
+    //end of remove
+...</code></pre>
+
+<p>这个处理很简单。注意，Avalon对数据对象扩展了很多方法，这里可以直接调用 <code>comments</code>  的 <code>remove</code> 方法，它需要的不是索引值，而是元素本身。如果要删除指定的索引元素，可以 使用 <code>removeAt(index)</code> 方法。</p>
+<h2 id="title_1-4">观看演示代码<a class="anchor" href="#title_1-4">&para;</a></h2>
 <ul>
-<li><a href="../demos/filter.html" class="inner">演示代码1 demos/filter.html</a></li>
+<li><a href="../demos/event.html" class="inner">演示代码1 demos/event.html</a></li>
 </ul>
-<h2 id="title_1-7">参考文档<a class="anchor" href="#title_1-7">&para;</a></h2>
+<h2 id="title_1-5">参考文档<a class="anchor" href="#title_1-5">&para;</a></h2>
 <ul>
-<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top24" class="outter">filter文档</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top10" class="outter">ms-click</a></li>
 </ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./filter.md">View Source</a>
+            <i class="icon download"></i><a href="./event.md">View Source</a>
         </div>
         <div class="ui blue inverted small label">
             <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>

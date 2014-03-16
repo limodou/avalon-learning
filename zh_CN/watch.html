@@ -61,7 +61,7 @@
     <a prev-chapter href="./comments.html"><i class="icon-arrow-left"></i> 评论处理</a>
 </div>
 <div class="chapter-next chapter-top">
-    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+    <a next-chapter href="./event.html">事件处理-删除操作 <i class="icon-arrow-right"></i></a>
 </div>
         
         <h1 id="title_1">使用 $watch 监视变化<a class="anchor" href="#title_1">&para;</a></h1>
@@ -75,6 +75,7 @@
 comments.comments.$watch('length', function(v){
     model.blog.comment_count = v;
 });
+// end of watch
 ...</code></pre>
 
 <p>在上面的代码中，根据新的评论条数来修改 <code>model</code> 中的 <code>comment_count</code> 的值。</p>

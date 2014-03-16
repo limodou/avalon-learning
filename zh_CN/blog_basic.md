@@ -81,7 +81,7 @@ Model 负责数据的加工，DOM模板（即 `ms-controller`, `ms-` 这样的�
 ### 编写 Model
 
 {% include file=../demos/blog_basic_1.html, class=linenums%}
-<script>...^</body>
+<script>...^</script>
 {% endinclude %}
 
 其实很简单，只是在 `vm` 上定义了一些属性，与DOM中的插值表达式的变量对应。
@@ -101,7 +101,7 @@ Model 负责数据的加工，DOM模板（即 `ms-controller`, `ms-` 这样的�
 定义形式（类似于 Hash 对象）。
 
 {% include file=../demos/blog_basic_2.html, class=linenums%}
-<script>...^</body>
+<script>...^</script>
 {% endinclude %}
 
 然后修改 DOM 中的插值表达式相应的变量前添加 `blog.` 。

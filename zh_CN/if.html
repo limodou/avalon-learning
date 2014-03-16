@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 <link rel="stylesheet" href="./static/ui.totop.css"/>
 
-<title>如何获得本教程 HTML 文档 - Avalon Learning</title>
+<title>条件处理-数据筛选 - Avalon Learning</title>
 </head>
 <body>
 
@@ -59,28 +59,80 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./if.html"><i class="icon-arrow-left"></i> 条件处理-数据筛选</a>
+    <a prev-chapter href="./class.html"><i class="icon-arrow-left"></i> CSS切換-出错处理</a>
 </div>
-
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+</div>
         
-        <h1 id="title_1">如何获得本教程 HTML 文档<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">手工转換<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>本文档使用 par 和 parm 项目转換而成。因此如果要手工转換，需要安装相关的包。因为 par, parm都是使用Python语言编写，所以你需要安装以下环境：</p>
+        <h1 id="title_1">条件处理-数据筛选<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">需求描述<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>现在我有一个新的要求，可以通过点击某个用户来对评论进行筛选，即：奇数次点击为只 显示这个用户的评论，偶数次点击为显示全部评论。</p>
+<p>针对这个需求，可以有两种实现的方法，一种是使用 <code>ms-visible</code> ，我们在上一章已经学过 了。另一种是使用 <code>ms-if</code>。</p>
+<h2 id="title_1-2">页面修改<a class="anchor" href="#title_1-2">&para;</a></h2>
+<pre class="prettyprint linenums"><code>...
+    &lt;!-- begin filter author --&gt;
+    &lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author &amp;&amp; el.author == filter_author)"&gt;
+      &lt;a class="avatar"&gt;
+        &lt;img ms-src="el.avatar"&gt;
+      &lt;/a&gt;
+      &lt;div class="content"&gt;
+        &lt;a class="author" ms-click="onlyme(el.author)"&gt;{{el.author}}&lt;/a&gt;
+        &lt;!-- end filter author --&gt;
+...</code></pre>
+
+<p>主要修改了两个地方，一处是添加了 <code>ms-if-loop</code> ，一处是添加了 <code>ms-click</code> 。</p>
+<p><code>ms-if-loop</code> 下面有解释。</p>
+<p><code>ms-click="onlyme(el.author)</code> 的作用是点击某个作者时，调用一个函数，用来设置 是否要进行用户过滤。</p>
+<h2 id="title_1-3">ms-if<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p><code>ms-if</code> 的作用是在渲染时，将不满足条件的元素直接去除，所以你将在渲染后的页面中 找不到被过滤掉的元素。而 <code>ms-visible</code> 的作用只是隐藏，并不会删除，所以它们还是 有区别的。</p>
+<p>上面我们提到的是使用 <code>ms-if</code> ，但其实使用它存在一定的问题的，原因就在于 Avalon 在处理 <code>ms-</code> 属性时是有顺序的，如文档中的描述是：</p>
+<pre class="prettyprint "><code>ms-skip --&gt; ms-important --&gt; ms-controller --&gt; ms-if --&gt; ms-repeat --&gt; ms-if-loop --&gt; ...--&gt;ms-each --&gt; ms-with --&gt; ms-duplex</code></pre>
+<p>所以我们可以看到， <code>ms-if</code> 的处理其实是在 <code>ms-repeat</code> 之前，所以会造成在 <code>ms-if</code> 中无法处理循环变量的问题，所以这里我们其实要改用 <code>ms-if-loop</code> ，它就是为了解决 这个问题。它的用法和 <code>ms-if</code> 其实是一样的。</p>
+<h2 id="title_1-4">ms-if-loop<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>上面的代码将:</p>
+<pre class="prettyprint "><code>&lt;div class="comment" ms-repeat="comments"&gt;</code></pre>
+<p>改为:</p>
+<pre class="prettyprint "><code>&lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author &amp;&amp; el.author == filter_author)"&gt;</code></pre>
+<p>这里表达式的意思是：</p>
 <ul>
-<li>python 2.6+(建议 2.7.6)</li>
-<li>安装 setuptools</li>
-<li>安装 pip</li>
+<li>如果 <code>filter_author</code> 为假，则显示</li>
+<li>如果 <code>filter_author</code> 为真，则当前作者名与 <code>filter_author</code> 相同则显示</li>
 </ul>
-<p>然后通过:</p>
-<pre class="prettyprint "><code>pip install parm</code></pre>
-<p>安装成功之后，再下载本项目的代码，然后运行项目目录下的 <code>make.bat</code> 或 <code>make.sh</code>( 如果权限不够可能还要修改执行权限)</p>
-<p>在执行时会自动在项目目录的同级创建一个名字 <code>avalon-learning-static</code> 的目录，双击 它下面的 <code>index.html</code> 就可以了。</p>
-<h2 id="title_1-2">直接下载<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>在github项目主页上，切換分支到 <code>gh-pages</code> 上，然后在右侧的下载中点击 <code>Downlaod ZIP</code> . 解压后，点击 <code>index.html</code> 就可以了。或者点击 <a href="https://github.com/limodou/avalon-learning/archive/gh-pages.zip" class="outter">这里</a>  下载当前最新文档。</p>
+<p>第一种对应全部显示，第二种对应选中某个作者的情况。</p>
+<h2 id="title_1-5">修改 Model 代码<a class="anchor" href="#title_1-5">&para;</a></h2>
+<p>在 <code>comments</code> Model 中进行如下修改：</p>
+<pre class="prettyprint linenums"><code>...
+    //begin of filter author
+    vm.filter_author = '';
+    vm.onlyme = function(author){
+        if (vm.filter_author)
+            vm.filter_author = '';
+        else
+            vm.filter_author = author;
+    }
+    //end of filter author
+...</code></pre>
+
+<p>修改的地方为：</p>
+<ol>
+<li>增加 <code>vm.filter_author = '';</code> 的初始化设置，缺省不过滤</li>
+<li>增加 <code>onlyme(el)</code> 函数，它需要一个参数，即点中的作者姓名，如果与保存的 <code>filter_author</code>    相同，则置空，如果不同，则赋值。用来区分是奇数次点击还是偶数次点击。</li>
+</ol>
+<h2 id="title_1-6">练习<a class="anchor" href="#title_1-6">&para;</a></h2>
+<p>我们可以自已试一下，把上面的 <code>ms-if-loop</code> 改为 <code>ms-visible</code> 。</p>
+<h2 id="title_1-7">观看演示代码<a class="anchor" href="#title_1-7">&para;</a></h2>
+<ul>
+<li><a href="../demos/if.html" class="inner">演示代码1 demos/if.html</a></li>
+</ul>
+<h2 id="title_1-8">参考文档<a class="anchor" href="#title_1-8">&para;</a></h2>
+<ul>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top12" class="outter">ms-if</a></li>
+</ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./howto_build.md">View Source</a>
+            <i class="icon download"></i><a href="./if.md">View Source</a>
         </div>
         <div class="ui blue inverted small label">
             <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 <link rel="stylesheet" href="./static/ui.totop.css"/>
 
-<title>事件处理-删除操作 - Avalon Learning</title>
+<title>双向绑定-添加操作 - Avalon Learning</title>
 </head>
 <body>
 
@@ -59,52 +59,80 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./watch.html"><i class="icon-arrow-left"></i> 使用 $watch 监视变化</a>
+    <a prev-chapter href="./event.html"><i class="icon-arrow-left"></i> 事件处理-删除操作</a>
 </div>
 <div class="chapter-next chapter-top">
-    <a next-chapter href="./duplex.html">双向绑定-添加操作 <i class="icon-arrow-right"></i></a>
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
 </div>
         
-        <h1 id="title_1">事件处理-删除操作<a class="anchor" href="#title_1">&para;</a></h1>
+        <h1 id="title_1">双向绑定-添加操作<a class="anchor" href="#title_1">&para;</a></h1>
 <h2 id="title_1-1">需求描述<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>有时我们会发现，评论的内容属于垃圾信息，因此需要将其删除。因此，我希望在查看评论 时，有一个删除的链接，点击后可以让我把它删除。</p>
-<p>这个需求比较简单，删除标签在前面已经有了，所以可以直接使用。在删除后，因为评论条 数变化，所以应该两个显示都发生变化，一会我们看随后的结果是不是正确。</p>
-<h2 id="title_1-2">ms-click<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>Avalon 中提供了大量的事件响应处理的属性，其中 <code>ms-click</code> 就是用来处理点击的属性。 我们修改：</p>
-<pre class="prettyprint "><code>&lt;a class="delete"&gt;Delete&lt;/a&gt;</code></pre>
-<p>为:</p>
+<p>下面开始考虑如何添加一条新的评论。从前面的界面中，我们已经看到预留了文本输入框， 只不过还没有对它进行处理。为了简化，我们只处理输入的文本，象：作者，时间等，都 认为已经存在。</p>
+<h2 id="title_1-2">ms-duplex<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>MVVM 框架的一个强大的功能就是数据的双向绑定，Model 中的数据可以与 DOM 绑定，DOM 的元素（如输入字段）也可以和 Model 中的数据绑定。这样，不管哪一方发生了变化，相 对应的另一方也会同步修改。如果你了解 angularjs 会认为这个很神奇，现在 Avalon 也 一样。</p>
+<p>定义双向绑定，可以使用 Avalon 提供的 <code>ms-duplex</code> 。</p>
+<p>对页面中的 <code>&lt;form&gt;</code> 进行修改为：</p>
 <pre class="prettyprint linenums"><code>...
-          &lt;a class="delete" ms-click="remove(el)"&gt;Delete&lt;/a&gt;
+    &lt;!-- form begin --&gt;
+    &lt;form class="ui reply form"&gt;
+      &lt;div class="field"&gt;
+        &lt;textarea ms-duplex="comment"&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;div class="ui fluid blue labeled submit icon button" ms-click="add"&gt;
+        &lt;i class="icon edit"&gt;&lt;/i&gt; Add Reply
+      &lt;/div&gt;
+    &lt;/form&gt;
+    &lt;!-- form end --&gt;
 ...</code></pre>
 
-<p>在 <code>ms-click</code> 后面是一个回调函数 <code>remove</code> 。如果这个回调没有参数，则可以不带括号。如果带 参数则传入相应的参数即可。这里传入了循环变量 <code>el</code> 。</p>
-<div class="ui warning message">
-<p>请注意，函数命名不要使用关键字，如 <code>delete</code> 等，否则会冲突。</p>
+<p>这里有两处变化：</p>
+<ol>
+<li>在 <code>&lt;textarea&gt;</code> 上添加了 <code>ms-duplex="comment"</code> ，它将与 Model 中的 <code>comment</code>    属性相对应。</li>
+<li>在下面的 <code>&lt;div&gt;</code> 按钮上添加 <code>ms-click="add"</code> ，它是一个事件绑定，用来处理添加。</li>
+</ol>
+<div class="ui info message">
+<p>这里我们可以看到， <code>add()</code> 是一个函数，但是因为我们不需要参数，所以在定义时，可以 忽略括号。</p>
 
 </div>
-<h2 id="title_1-3">定义回调<a class="anchor" href="#title_1-3">&para;</a></h2>
-<p>然后让我们在 <code>comments</code> Model 中定义对应的 <code>remove</code> 函数，如：</p>
+<h2 id="title_1-3">修改 Model<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>在 <code>comments</code> Model 中进行如下修改：</p>
 <pre class="prettyprint linenums"><code>...
-    //begin of remove
-    vm.remove = function(el){
-        vm.comments.remove(el);
+    //begin of add
+    vm.comment = '';
+    vm.add = function(){
+        if (vm.comment.trim()){
+            //ajax request process
+            vm.comments.push({"id":1,
+                "author":"John Smith",
+                "date":"just now",
+                "content":vm.comment,
+                "avatar":"./avatar3.jpg"}
+            );
+            vm.comment = '';
+        }
     }
-    //end of remove
+    //end of add
 ...</code></pre>
 
-<p>这个处理很简单。注意，Avalon对数据对象扩展了很多方法，这里可以直接调用 <code>comments</code>  的 <code>remove</code> 方法，它需要的不是索引值，而是元素本身。如果要删除指定的索引元素，可以 使用 <code>removeAt(index)</code> 方法。</p>
+<p>这个修改主要干了两件事：</p>
+<ol>
+<li>添加 <code>vm.comment = ''</code> ，定义评论的初始值为空</li>
+<li><p>添加 <code>add()</code> 方法。这里我先检查内容是否为空，如果为空，则不进行添加评论的处理。    如果不为空，则向 <code>vm.comments</code> 数组追加一条新的记录。除了 <code>content</code> 是等于    <code>vm.comment</code> 以外，其它的都使用缺省值，只是为了展示。</p>
+<p>这里正常的处理应该是通过 ajax 向后台发送数据，当后台处理成功之后，再将数据 追加到评论数组中。但是因为只是一个演示，这块就省略了。</p>
+<p>在追加之后，将 <code>vm.comment</code> 置空。</p></li>
+</ol>
 <h2 id="title_1-4">观看演示代码<a class="anchor" href="#title_1-4">&para;</a></h2>
 <ul>
-<li><a href="../demos/event.html" class="inner">演示代码1 demos/event.html</a></li>
+<li><a href="../demos/duplex.html" class="inner">演示代码1 demos/duplex.html</a></li>
 </ul>
 <h2 id="title_1-5">参考文档<a class="anchor" href="#title_1-5">&para;</a></h2>
 <ul>
-<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top10" class="outter">ms-click</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top13" class="outter">ms-duplex</a></li>
 </ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./event.md">View Source</a>
+            <i class="icon download"></i><a href="./duplex.md">View Source</a>
         </div>
         <div class="ui blue inverted small label">
             <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 <link rel="stylesheet" href="./static/ui.totop.css"/>
 
-<title>如何获得本教程 HTML 文档 - Avalon Learning</title>
+<title>在 Uliweb 中使用 Avalon - Avalon Learning</title>
 </head>
 <body>
 
@@ -59,28 +59,49 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./uliweb.html"><i class="icon-arrow-left"></i> 在 Uliweb 中使用 Avalon</a>
+    <a prev-chapter href="./if.html"><i class="icon-arrow-left"></i> 条件处理-数据筛选</a>
 </div>
-
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
+</div>
         
-        <h1 id="title_1">如何获得本教程 HTML 文档<a class="anchor" href="#title_1">&para;</a></h1>
-<h2 id="title_1-1">手工转換<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>本文档使用 par 和 parm 项目转換而成。因此如果要手工转換，需要安装相关的包。因为 par, parm都是使用Python语言编写，所以你需要安装以下环境：</p>
-<ul>
-<li>python 2.6+(建议 2.7.6)</li>
-<li>安装 setuptools</li>
-<li>安装 pip</li>
-</ul>
-<p>然后通过:</p>
-<pre class="prettyprint "><code>pip install parm</code></pre>
-<p>安装成功之后，再下载本项目的代码，然后运行项目目录下的 <code>make.bat</code> 或 <code>make.sh</code>( 如果权限不够可能还要修改执行权限)</p>
-<p>在执行时会自动在项目目录的同级创建一个名字 <code>avalon-learning-static</code> 的目录，双击 它下面的 <code>index.html</code> 就可以了。</p>
-<h2 id="title_1-2">直接下载<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>在github项目主页上，切換分支到 <code>gh-pages</code> 上，然后在右侧的下载中点击 <code>Downlaod ZIP</code> . 解压后，点击 <code>index.html</code> 就可以了。或者点击 <a href="https://github.com/limodou/avalon-learning/archive/gh-pages.zip" class="outter">这里</a>  下载当前最新文档。</p>
+        <h1 id="title_1">在 Uliweb 中使用 Avalon<a class="anchor" href="#title_1">&para;</a></h1>
+<p><a href="https://github.com/limodou/uliweb" class="outter">Uliweb</a> 是一个 Python 语言开发的 Web 框架，在 Uliweb 项目中使用 Avalon 很简单， 基本上有两种方式：</p>
+<h2 id="title_1-1">配置 plugs.ui.avalon<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>在 Uliweb 的 APP 收集项目 plugs 中已经集成了 Avalon ，所以简单的方式是先安装 plugs，如：</p>
+<pre class="prettyprint "><code>pip install plugs</code></pre>
+<p>然后在你的项目 <code>apps/settings.ini</code> 的 <code>GLOBAL/INSTALLED_APPS</code> 中添加:</p>
+<pre class="prettyprint "><code>plugs.ui.avalon</code></pre>
+<p>这样配置工作就完成了。</p>
+<p>再接着，哪个页面模板打算使用 Avalon ，在页面中添加:</p>
+<pre class="prettyprint "><code>{{use "avalon"}}</code></pre>
+<p>就可以了。</p>
+<h2 id="title_1-2">手工处理<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>如果不使用 avalon 那么也可以手工引入，也比较简单：</p>
+<ol>
+<li>将 <code>avalon.js</code> 拷贝到你的某个 APP 下的 <code>static</code> 目录下, 也可以在 <code>static</code> 下的某个子目录下</li>
+<li><p>在模板页面中使用：</p>
+<pre class="prettyprint "><code>{{link "/static/avalon.js"}}</code></pre>
+<p>但是光这样还不够，因为 Avalon 的插值表达式是使用 <code>{{}}</code> 作为标签的，与 Uliewb 的模板标签冲突。因此有两种方式：</p>
+<ol>
+<li><p>重新设置 Avalon 的插值表达式的标签，如：</p>
+<pre class="prettyprint "><code>avalon.config({
+   interpolate: ["{%", "%}"]
+});</code></pre>
+<p>在 plugs 中，其实就是这样处理的。只不过，它把上面的代码写在了 <code>avalon_init.js</code> 文件中，并在 <code>{{use "avalon"}}</code> 时自动引入了这个 js 文件。</p>
+<p>这样，再写插值表达式时可以是：</p>
+<pre class="prettyprint "><code>{% expression %}</code></pre></li>
+<li><p>在模板中设定 Uliweb 的标签字符串，如：</p>
+<pre class="prettyprint "><code>#uliweb-template-tag:[[,]]</code></pre>
+<p>这一行要写在模板的最上面一行。这样，Avalon 的写法不变，变的是 Uliweb 的模 板写法。</p></li>
+</ol>
+<p>以上两种方法都可以，不过建议使用第一种。</p></li>
+</ol>
+<p>除了 Uliweb 还有其它的一些框架，基本使用是类似的，当出现标签冲突时都可以使用上 面第一种方法解决。</p>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./howto_build.md">View Source</a>
+            <i class="icon download"></i><a href="./uliweb.md">View Source</a>
         </div>
         <div class="ui blue inverted small label">
             <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>

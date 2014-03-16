@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../zh_CN/static/semantic/css/semantic.min.css"/>
+<script type="text/javascript" src="../zh_CN/static/semantic/javascript/semantic.min.js"></script>
+<link rel="stylesheet" type="text/css" href="blog.css"/>
+<script src="avalon.js"></script>
+<title>Avalon Learning Blog</title>
+</head>
+<body>
+<!-- HEADER -->
+<div class="head">
+    <h1 class="ui header">Avalon Learning Blog
+        <div class="sub header">带你快速走进 Avalon 的世界</div>
+    </h1>
+</div>
+<!-- Blog正文 -->
+<div class="ui attached bottom segment" id="blogs" ms-controller="blog">
+    <div class="ui stacked segment blog">
+        <div class="blog-body">
+        <h2 class="ui header">
+            <div class="content">
+                {{blog.subject}}
+                <div class="sub header">{{blog.author}} • {{blog.publish_date|date('yyyy-MM-dd')}} • <span class="ui label"><i class="comment icon"></i> {{blog.comment_count}}</span></div>
+            </div>
+        </h2>
+        <div class="ui divider"></div>
+        <div class="blog-content">{{blog.content|html}}</div>
+    </div>
+</div>
+
+<!-- comments -->
+<div class="ui piled blue segment" ms-controller="comments">
+  <h2 class="ui header">
+    <i class="icon inverted circular blue comment"></i> Comments {{comments.size()}}
+  </h2>
+  <div class="ui comments">
+    <div class="comment" ms-repeat="comments">
+      <a class="avatar">
+        <img ms-src="el.avatar">
+      </a>
+      <div class="content">
+        <a class="author">{{el.author}}</a>
+        <div class="metadata">
+          <span class="date">{{el.date}}</span>
+        </div>
+        <div class="text">
+          {{el.content|html}}
+        </div>
+        <div class="actions">
+          <a class="delete" ms-click="remove(el)">Delete</a>
+        </div>
+      </div>
+    </div>
+    <!-- form begin -->
+    <form class="ui reply form">
+      <!-- validate begin -->
+      <div class="field" ms-class="error:content_error">
+        <textarea ms-duplex="comment"></textarea>
+        <div class="ui red pointing prompt label transition" style="display: inline-block;" ms-visible="content_error">Please enter content</div>
+      </div>
+      <!-- validate end -->
+      <div class="ui fluid blue labeled submit icon button" ms-click="add">
+        <i class="icon edit"></i> Add Reply
+      </div>
+    </form>
+    <!-- form end -->
+  </div>
+</div>
+<!-- end comments -->
+
+<script>
+var model = avalon.define("blog", function(vm){
+    vm.blog = {};
+});
+
+var comments = avalon.define("comments", function(vm){
+    vm.comments = [];
+    
+    //begin of remove
+    vm.remove = function(el){
+        vm.comments.remove(el);
+    }
+    //end of remove
+   
+    //begin of add
+    vm.comment = '';
+    vm.content_error = false;
+    vm.add = function(){
+        if (vm.comment.trim()){
+            //ajax request process
+            vm.comments.push({"id":1,
+                "author":"John Smith",
+                "date":"just now",
+                "content":vm.comment,
+                "avatar":"./avatar3.jpg"}
+            );
+            vm.comment = '';
+            vm.content_error = false;
+        }else{
+            vm.content_error = true;
+        }
+    }
+    //end of add
+});
+
+$(function(){
+    $.getJSON('blog_info.json').done(function(data){
+        model.blog = data;
+    });
+    $.getJSON('comments.json').done(function(data){
+        comments.comments = data;
+    });
+});
+
+// begin of watch
+comments.comments.$watch('length', function(v){
+    model.blog.comment_count = v;
+});
+// end of watch
+
+</script>
+</body>
+</html>

@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
 <link rel="stylesheet" href="./static/ui.totop.css"/>
 
-<title>双向绑定-添加操作 - Avalon Learning</title>
+<title>CSS切換-出错处理 - Avalon Learning</title>
 </head>
 <body>
 
@@ -59,46 +59,57 @@
     <div class="twelve wide column" id="markdown-content">
     
         <div class="chapter-prev chapter-top">
-    <a prev-chapter href="./event.html"><i class="icon-arrow-left"></i> 事件处理-删除操作</a>
+    <a prev-chapter href="./duplex.html"><i class="icon-arrow-left"></i> 双向绑定-添加操作</a>
 </div>
 <div class="chapter-next chapter-top">
-    <a next-chapter href="./class.html">CSS切換-出错处理 <i class="icon-arrow-right"></i></a>
+    <a next-chapter href="./howto_build.html">如何获得本教程 HTML 文档 <i class="icon-arrow-right"></i></a>
 </div>
         
-        <h1 id="title_1">双向绑定-添加操作<a class="anchor" href="#title_1">&para;</a></h1>
+        <h1 id="title_1">CSS切換-出错处理<a class="anchor" href="#title_1">&para;</a></h1>
 <h2 id="title_1-1">需求描述<a class="anchor" href="#title_1-1">&para;</a></h2>
-<p>下面开始考虑如何添加一条新的评论。从前面的界面中，我们已经看到预留了文本输入框， 只不过还没有对它进行处理。为了简化，我们只处理输入的文本，象：作者，时间等，都 认为已经存在。</p>
-<h2 id="title_1-2">ms-duplex<a class="anchor" href="#title_1-2">&para;</a></h2>
-<p>MVVM 框架的一个强大的功能就是数据的双向绑定，Model 中的数据可以与 DOM 绑定，DOM 的元素（如输入字段）也可以和 Model 中的数据绑定。这样，不管哪一方发生了变化，相 对应的另一方也会同步修改。如果你了解 angularjs 会认为这个很神奇，现在 Avalon 也 一样。</p>
-<p>定义双向绑定，可以使用 Avalon 提供的 <code>ms-duplex</code> 。</p>
-<p>对页面中的 <code>&lt;form&gt;</code> 进行修改为：</p>
+<p>在上一章中，我们对于无内容的添加没有进行处理，现在我希望添加一个出错显示，告诉 用户要输入内容。当成功输入提交内容后，出错提示消失。</p>
+<h2 id="title_1-2">页面效果<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>出错信息的样式也是从 sementic-ui 中取出来的，基本的格式是：</p>
+<pre class="prettyprint "><code>&lt;div class="field error"&gt;
+  &lt;textarea&gt;&lt;/textarea&gt;
+  &lt;div class="ui red pointing prompt label transition" style="display: inline-block;"&gt;Please enter content&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>有两个地方要注意：</p>
+<ol>
+<li>在 <code>&lt;div class="field"&gt;</code> 的 class 上添加 <code>error</code>, 这样整个 <code>&lt;div&gt;</code> 都是红色的。</li>
+<li>在输入控件的下面添加一个红色的提示，包括出错描述。</li>
+</ol>
+<p>最终的展示效果是这样的:</p>
+<p><img src="images/class_error.png"/>
+</p>
+<p>我们现在就是要实现这样的动态效果。</p>
+<h2 id="title_1-3">页面修改<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>将原来输入框的代码改为：</p>
 <pre class="prettyprint linenums"><code>...
-    &lt;!-- form begin --&gt;
-    &lt;form class="ui reply form"&gt;
-      &lt;div class="field"&gt;
+      &lt;!-- validate begin --&gt;
+      &lt;div class="field" ms-class="error:content_error"&gt;
         &lt;textarea ms-duplex="comment"&gt;&lt;/textarea&gt;
+        &lt;div class="ui red pointing prompt label transition" style="display: inline-block;" ms-visible="content_error"&gt;Please enter content&lt;/div&gt;
       &lt;/div&gt;
-      &lt;div class="ui fluid blue labeled submit icon button" ms-click="add"&gt;
-        &lt;i class="icon edit"&gt;&lt;/i&gt; Add Reply
-      &lt;/div&gt;
-    &lt;/form&gt;
-    &lt;!-- form end --&gt;
+      &lt;!-- validate end --&gt;
 ...</code></pre>
 
-<p>这里有两处变化：</p>
-<ol>
-<li>在 <code>&lt;textarea&gt;</code> 上添加了 <code>ms-duplex="comment"</code> ，它将与 Model 中的 <code>comment</code>    属性相对应。</li>
-<li>在下面的 <code>&lt;div&gt;</code> 按钮上添加 <code>ms-click="add"</code> ，它是一个事件绑定，用来处理添加。</li>
-</ol>
-<div class="ui info message">
-<p>这里我们可以看到， <code>add()</code> 是一个函数，但是因为我们不需要参数，所以在定义时，可以 忽略括号。</p>
-
-</div>
-<h2 id="title_1-3">修改 Model<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>这里増加了两个新的属性 <code>ms-class</code> 和 <code>ms-visible</code> 。</p>
+<h2 id="title_1-4">ms-class<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>可以用它来増加新的属性，基本语法为：</p>
+<pre class="prettyprint "><code>ms-class="classname:expression"</code></pre>
+<p><code>classname</code> 为即将増加的 CSS class 的名字。 <code>:</code> 后面的是一个表达式，可以为一个 变量。当为 <code>true</code> 时，这个 <code>classname</code> 将被添加，否则将去掉。</p>
+<p>如果我们有多个 class 要添加，并且判断条件不同，因为如果定义多个 <code>ms-class</code> 会造 成属性重复，所以为了解决这个问题， Avalon 提供了特殊的写法，使用 <code>ms-class-1</code>, <code>ms-class-2</code> 这样的写法，区分不同的 class。很方便，很灵活。</p>
+<p>因此 <code>ms-class="error:content_error"</code> 意味着，当 Model 中的变量 <code>content_error</code>  为 <code>true</code> 时，表示有错误， <code>error</code> 将被添加到元素的 <code>class</code> 上。</p>
+<h2 id="title_1-5">ms-visible<a class="anchor" href="#title_1-5">&para;</a></h2>
+<p>可以用它来显示或隐藏某个元素，类似于使用 <code>display:none</code> 。</p>
+<p>所以上面的代码 <code>ms-visible="content_error"</code> 就表示，当 <code>content_error</code> 为 <code>true</code> 时，对应的元素，即出错元素将显示出来。</p>
+<h2 id="title_1-6">修改 Model 代码<a class="anchor" href="#title_1-6">&para;</a></h2>
 <p>在 <code>comments</code> Model 中进行如下修改：</p>
 <pre class="prettyprint linenums"><code>...
     //begin of add
     vm.comment = '';
+    vm.content_error = false;
     vm.add = function(){
         if (vm.comment.trim()){
             //ajax request process
@@ -109,30 +120,36 @@
                 "avatar":"./avatar3.jpg"}
             );
             vm.comment = '';
+            vm.content_error = false;
+        }else{
+            vm.content_error = true;
         }
     }
     //end of add
 ...</code></pre>
 
-<p>这个修改主要干了两件事：</p>
+<p>修改的地方为：</p>
 <ol>
-<li>添加 <code>vm.comment = ''</code> ，定义评论的初始值为空</li>
-<li><p>添加 <code>add()</code> 方法。这里我先检查内容是否为空，如果为空，则不进行添加评论的处理。    如果不为空，则向 <code>vm.comments</code> 数组追加一条新的记录。除了 <code>content</code> 是等于    <code>vm.comment</code> 以外，其它的都使用缺省值，只是为了展示。</p>
-<p>这里正常的处理应该是通过 ajax 向后台发送数据，当后台处理成功之后，再将数据 追加到评论数组中。但是因为只是一个演示，这块就省略了。</p>
-<p>在追加之后，将 <code>vm.comment</code> 置空。</p></li>
+<li>增加 <code>vm.content_error = false;</code> 的初始化设置</li>
+<li>在添加处理中根据不同的情况来设置 <code>content_error</code> 的值。</li>
 </ol>
-<h2 id="title_1-4">观看演示代码<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>就这么简单。</p>
+<h2 id="title_1-7">练习<a class="anchor" href="#title_1-7">&para;</a></h2>
+<p>我们甚至可以实现，在出错的情况下，如果输入了内容就让出错提示消失的功能。具体的 实现作为练习，大家可以自已试一下。也可以看下面的“演示代码2” 。</p>
+<h2 id="title_1-8">观看演示代码<a class="anchor" href="#title_1-8">&para;</a></h2>
 <ul>
-<li><a href="../demos/duplex.html" class="inner">演示代码1 demos/duplex.html</a></li>
+<li><a href="../demos/class.html" class="inner">演示代码1 demos/class.html</a></li>
+<li><a href="../demos/class_1.html" class="inner">演示代码2 demos/class_1.html</a></li>
 </ul>
-<h2 id="title_1-5">参考文档<a class="anchor" href="#title_1-5">&para;</a></h2>
+<h2 id="title_1-9">参考文档<a class="anchor" href="#title_1-9">&para;</a></h2>
 <ul>
-<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top13" class="outter">ms-duplex</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top9" class="outter">ms-class</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top11" class="outter">ms-visible</a></li>
 </ul>
 
         
         <div class="ui blue inverted small label">
-            <i class="icon download"></i><a href="./duplex.md">View Source</a>
+            <i class="icon download"></i><a href="./class.md">View Source</a>
         </div>
         <div class="ui blue inverted small label">
             <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>

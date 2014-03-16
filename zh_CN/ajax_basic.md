@@ -39,7 +39,7 @@ JSON.parse(json_string)
 从后台读取数据，然后修改 Model 实例中对应的属性。代码为：
 
 {% include file=../demos/ajax_basic.html, class=linenums%}
-<script>...^</body>
+<script>...^</script>
 {% endinclude %}
 
 从上面的代码可以看出， `vm.blog = {}` ，内容没有直接定义出来。

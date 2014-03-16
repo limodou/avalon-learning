@@ -78,7 +78,7 @@
 下面是完整的 js 代码，包括 Blog 的基本信息展示：
 
 {% include file=../demos/comments.html, class=linenums%}
-<script>...^</body>
+<script>...^</script>
 {% endinclude %}
 
 看到了吗？就这么简单。比原来的内容，増加了：

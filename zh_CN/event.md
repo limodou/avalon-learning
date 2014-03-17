@@ -42,9 +42,35 @@ Avalon 中提供了大量的事件响应处理的属性，其中 `ms-click` 就�
 的 `remove` 方法，它需要的不是索引值，而是元素本身。如果要删除指定的索引元素，可以
 使用 `removeAt(index)` 方法。
 
+## 另一种删除方法
+
+作者司徒正美对于删除操作，又给了另一种做法，就是使用 `$remove` ，这个是 `ms-repeat`
+在渲染时自动生成的，可以用来删除当前项。因此我们按这种办法修改一下：
+
+### 页面调整
+
+将页面删除的事件，修改为：
+
+{% include file=../demos/event_1.html, class=linenums %}
+<!-- delete action begin -->...<!-- delete action end -->
+{% endinclude %}
+
+这里， `remove()` 函数的参数改为了 `$remove`
+
+### Model 代码调整
+
+将 `remove` 的代码调整一下：
+
+{% include file=../demos/event_1.html, class=linenums %}
+//begin of remove...//end of remove
+{% endinclude %}
+
+参数改为 `rm` 方便理解。然后调用 `rm()` 删除即可。更简单方便。
+
 ## 观看演示代码
 
 * [演示代码1 demos/event.html](../demos/event.html)
+* [演示代码2 demos/event_1.html](../demos/event_1.html)
 
 ## 参考文档
 

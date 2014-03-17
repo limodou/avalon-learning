@@ -100,6 +100,15 @@
 
 所以目前， `ms-repeat` 是更方便的用法。
 
+## 问题
+
+1. `ms-repeat` 能不能定义 `el` 之外的循环变量？
+
+    答案：可以。使用 `ms-repeat-name` 。
+2. `ms-repeat` 能不能支持多层嵌套？
+
+    答案：可以。示例参见: http://runjs.cn/code/8dss3sov
+
 ## 观看演示代码
 
 * [演示代码1 demos/comments.html](../demos/comments.html)

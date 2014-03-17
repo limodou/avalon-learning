@@ -93,11 +93,36 @@
 ...</code></pre>
 
 <p>这个处理很简单。注意，Avalon对数据对象扩展了很多方法，这里可以直接调用 <code>comments</code>  的 <code>remove</code> 方法，它需要的不是索引值，而是元素本身。如果要删除指定的索引元素，可以 使用 <code>removeAt(index)</code> 方法。</p>
-<h2 id="title_1-4">观看演示代码<a class="anchor" href="#title_1-4">&para;</a></h2>
+<h2 id="title_1-4">另一种删除方法<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>作者司徒正美对于删除操作，又给了另一种做法，就是使用 <code>$remove</code> ，这个是 <code>ms-repeat</code> 在渲染时自动生成的，可以用来删除当前项。因此我们按这种办法修改一下：</p>
+<h3 id="title_1-4-1">页面调整<a class="anchor" href="#title_1-4-1">&para;</a></h3>
+<p>将页面删除的事件，修改为：</p>
+<pre class="prettyprint linenums"><code>...
+        &lt;!-- delete action begin --&gt;
+        &lt;div class="actions"&gt;
+          &lt;a class="delete" ms-click="remove($remove)"&gt;Delete&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;!-- delete action end --&gt;
+...</code></pre>
+
+<p>这里， <code>remove()</code> 函数的参数改为了 <code>$remove</code></p>
+<h3 id="title_1-4-2">Model 代码调整<a class="anchor" href="#title_1-4-2">&para;</a></h3>
+<p>将 <code>remove</code> 的代码调整一下：</p>
+<pre class="prettyprint linenums"><code>...
+    //begin of remove
+    vm.remove = function(rm){
+        rm();
+    }
+    //end of remove
+...</code></pre>
+
+<p>参数改为 <code>rm</code> 方便理解。然后调用 <code>rm()</code> 删除即可。更简单方便。</p>
+<h2 id="title_1-5">观看演示代码<a class="anchor" href="#title_1-5">&para;</a></h2>
 <ul>
 <li><a href="../demos/event.html" class="inner">演示代码1 demos/event.html</a></li>
+<li><a href="../demos/event_1.html" class="inner">演示代码2 demos/event_1.html</a></li>
 </ul>
-<h2 id="title_1-5">参考文档<a class="anchor" href="#title_1-5">&para;</a></h2>
+<h2 id="title_1-6">参考文档<a class="anchor" href="#title_1-6">&para;</a></h2>
 <ul>
 <li><a href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top10" class="outter">ms-click</a></li>
 </ul>

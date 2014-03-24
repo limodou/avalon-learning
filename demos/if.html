@@ -38,7 +38,7 @@
   </h2>
   <div class="ui comments">
     <!-- begin filter author -->
-    <div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author && el.author == filter_author)">
+    <div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || el.author == filter_author">
       <a class="avatar">
         <img ms-src="el.avatar">
       </a>

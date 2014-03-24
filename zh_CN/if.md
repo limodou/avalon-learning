@@ -49,7 +49,7 @@ ms-skip --> ms-important --> ms-controller --> ms-if --> ms-repeat --> ms-if-loo
 改为:
 
 ```
-<div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author && el.author == filter_author)">
+<div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || el.author == filter_author">
 ```
 
 这里表达式的意思是：

@@ -72,7 +72,7 @@
 <h2 id="title_1-2">页面修改<a class="anchor" href="#title_1-2">&para;</a></h2>
 <pre class="prettyprint linenums"><code>...
     &lt;!-- begin filter author --&gt;
-    &lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author &amp;&amp; el.author == filter_author)"&gt;
+    &lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || el.author == filter_author"&gt;
       &lt;a class="avatar"&gt;
         &lt;img ms-src="el.avatar"&gt;
       &lt;/a&gt;
@@ -93,7 +93,7 @@
 <p>上面的代码将:</p>
 <pre class="prettyprint "><code>&lt;div class="comment" ms-repeat="comments"&gt;</code></pre>
 <p>改为:</p>
-<pre class="prettyprint "><code>&lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || (filter_author &amp;&amp; el.author == filter_author)"&gt;</code></pre>
+<pre class="prettyprint "><code>&lt;div class="comment" ms-repeat="comments" ms-if-loop="!filter_author || el.author == filter_author"&gt;</code></pre>
 <p>这里表达式的意思是：</p>
 <ul>
 <li>如果 <code>filter_author</code> 为假，则显示</li>

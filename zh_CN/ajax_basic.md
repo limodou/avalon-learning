@@ -30,7 +30,7 @@ JSON.parse(json_string)
 伴随着 avalon，作者司徒正美还开发了其它的 js 库，如： [mmRequest](https://github.com/RubyLouvre/mmRequest), [mmDeffered](https://github.com/RubyLouvre/mmDeferred) 等，
 其中 mmRequest 就是可以实现 jquery 的 ajax 功能。不过这些库本身没有放在 avalon 
 的源码中，所以要使用它们还要单独下载源码。这里我先
-使用 jquery 。而且在前面的例子中，因为使用sementic-ui，它本身就需要安装 jquery，
+使用 jquery 。而且在前面的例子中，因为使用semantic-ui，它本身就需要安装 jquery，
 所以我们已经不再需要加入新的 js 文件了。
 
 ## 获取数据

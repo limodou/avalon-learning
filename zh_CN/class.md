@@ -8,7 +8,7 @@
 
 ## 页面效果
 
-出错信息的样式也是从 sementic-ui 中取出来的，基本的格式是：
+出错信息的样式也是从 semantic-ui 中取出来的，基本的格式是：
 
 ```
 <div class="field error">

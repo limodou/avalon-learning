@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link rel="stylesheet" href="./static/semantic/css/semantic.min.css"/>
+<link href="./static/asset/prettify.css" rel="stylesheet">
+<link href="./static/toc/toc.css" rel="stylesheet">
+<link rel="stylesheet" href="./static/parm.css"/>
+<link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
+<link rel="stylesheet" href="./static/ui.totop.css"/>
+
+<title>Hello, Avalon - Avalon Learning</title>
+</head>
+<body>
+
+
+
+<!-- Navbar
+================================================== -->
+<div class="navbar">
+  <div class="ui small secondary inverted borderless menu">
+    
+    <a class="active item" href="./index.html">Home</a>
+    
+    <div class="right menu">
+      
+        
+<div class="item">
+  <div class="ui icon input">
+    <form id="searchform">
+    <input name="q" type="text" placeholder="Search...">
+    </form>
+  </div>
+</div>
+
+      
+      <div class="ui dropdown item">
+        Select Languages <i class="icon dropdown"></i>
+        <div class="menu">
+          <!--<a class="item language" href="#" data-lang="en">English</a>-->
+          <a class="item language" href="#" data-lang="zh_CN">中文</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="ui divided grid">
+    <div class="four wide column" id="side-bar">
+        <div id="toc" class="content"></div>
+    </div> 
+    
+    <div class="twelve wide column" id="markdown-content">
+    
+        <div class="chapter-prev chapter-top">
+    <a prev-chapter href="./installation.html"><i class="icon-arrow-left"></i> 获得Avalon源码</a>
+</div>
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./blog_basic.html">Blog 基本内容展示 <i class="icon-arrow-right"></i></a>
+</div>
+        
+        <h1 id="title_1">Hello, Avalon<a class="anchor" href="#title_1">&para;</a></h1>
+<p>在前面我们下载好了源文件之后，我们就可以开始学习Avalon的使用了。</p>
+<h2 id="title_1-1">操作<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>Avalon 的主要文件有两个版本，一个是 <code>avalon.js</code> 它可以实现对旧的IE浏览器很好的 兼容，目前甚至可以支持IE6，所以对于anguarjs来说，这是一个很强大的地方。我说过 我以前也用过angularjs吗？不过我现在希望以后就用avalon了。另一个是 <code>avalon.mobile.js</code> 它主要是支持现代的浏览器，所以如果考虑兼容就使用 <code>avalon.js</code> 好了。</p>
+<ol>
+<li>让我们先建一个测试用的目录，如 <code>mywork</code></li>
+<li>将 <code>avalon.js</code> 拷贝到 <code>mywork</code> 下</li>
+<li><p>然后创建一个名为 <code>hello_avalon.html</code> 的文件。</p>
+<p>一般我们学习编程第一个例子不都是类似于 <code>Hello, world</code> 吗？所以我们先 从 <code>Hello, Avalon</code> 开始。</p></li>
+<li><p>输入以下内容：</p>
+<pre class="prettyprint linenums"><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div ms-controller="hello"&gt;
+&lt;h1&gt;Hello, {{name}}&lt;/h1&gt;
+&lt;/div&gt;
+&lt;script&gt;
+var model = avalon.define('hello', function(vm){
+    vm.name = 'Avalon';
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+<li><p>在浏览器打开这个文件，结果是：</p>
+<p><img src="images/hello_avalon.png"/>
+</p></li>
+</ol>
+<p>下面让我们解释一下：</p>
+<h2 id="title_1-2">导入 avalon.js<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>通过:</p>
+<pre class="prettyprint "><code>&lt;script src="avalon.js"&gt;&lt;/script&gt;</code></pre>
+<p>来引入avalon的核心文件。本身avalon并不需要jquery的支持，它内部实现了许多jquery 的功能，但是的确可以与jquery一起使用。</p>
+<h2 id="title_1-3">设置控制域<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p><code>&lt;div ms-controller="hello"&gt;</code> 这个很重要，它用来声明avalon的控制域。如果你了解 angularjs，它就类似于 <code>ng-controller</code> 的作用。一个HTML文件中可以定义多个 <code>ms-controller</code>。</p>
+<p>一个控制域与一个Model相对应，当Model中的数据发生变化，与之对应的控制域的DOM会自 动进行变化。</p>
+<p><code>ms-controller</code> 后面要给一个名字，在下面我们会按名字来定义 Model。</p>
+<p>因为控制域是定义在DOM中的，因此，它的作用就是起到模板的功能，因此，未来我们大部分 的展示工作都将集中在这里，后面我们会看到，它是如何与数据绑定，并且自动变化的。</p>
+<h2 id="title_1-4">ms- 开头的属性<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>区别于angularjs使用 <code>ng-</code> 开头的特殊标签/属性来定义angularjs的功能，avalon使用 <code>ms-</code>  开头的属性。所以只要涉及到Avalon动态处理功能的，都要注意定义 <code>ms-</code> 开头的属性。</p>
+<p>目前，Avalon并不存在以 <code>ms-</code> 开头的 TAG，所以全部都是属性。</p>
+<h2 id="title_1-5">插值表达式<a class="anchor" href="#title_1-5">&para;</a></h2>
+<p><code>&lt;h1&gt;Hello, {{name}}&lt;/h1&gt;</code> 它包含了 <code>{{name}}</code> 这就是一个插件表达式。可以理解为可 动态变化的模板变量。 <code>name</code> 将定义在下面的 Model 中，一会我们会看到。</p>
+<p>这个插值表达式是放在文本中的，也有一些 <code>ms-</code> 的特殊属性可以使用插值。</p>
+<p>插件表达式会被avalon进行计算，然后结果将显示在原来的位置。所以你其实是可以写更 复杂一些的表达式的。关于这一点，可以自行测试。</p>
+<h2 id="title_1-6">定义Model<a class="anchor" href="#title_1-6">&para;</a></h2>
+<pre class="prettyprint "><code>&lt;script&gt;
+var model = avalon.define('hello', function(vm){
+    vm.name = 'Avalon';
+});
+&lt;/script&gt;</code></pre>
+<p>Model的定义是通过javascript来实现的。要通过 <code>avalon.define()</code> 函数来定义。它需 要至少两个参数：</p>
+<ul>
+<li>第一个参数是和前面 <code>ms-controller</code> 对应的名字。这里是 <code>hello</code></li>
+<li>第二个是一个函数，这个函数需要一个参数，名字可以随便起，但是习惯上使用 <code>vm</code> (在   Avalon中表示是 ViewModel 的意思)。 <code>vm</code> 可以理解为Model的引用。</li>
+</ul>
+<p>你可能还会看到 <code>avalon.define()</code> 还赋给了一个变量。那么，我们就可以利用这个变量 在 Model 之外来引用 Model 里面的值。 <strong>这一点非常方便</strong> 。</p>
+<p><code>vm.name = 'Avalon';</code> 在 <code>vm</code> 上定义了一个 <code>name</code> 的属性，所以和前面的插件表达式 一对应，我们就知道 <code>{{name}}</code> 的值就是这个。</p>
+<h2 id="title_1-7">如何引用Model的属性<a class="anchor" href="#title_1-7">&para;</a></h2>
+<p>通常我们定义的Model属性大体上分为两类，一类是数据，如：数组，Object(可理解为Hash)，简单 变量等，还有一类就是函数了。</p>
+<p>在控制域中使用这些Model的属性时，直接引用它们的名字，并不需要再添加 <code>vm.</code> 这样的前缀。</p>
+<h2 id="title_1-8">Avalon 的启动简单介绍<a class="anchor" href="#title_1-8">&para;</a></h2>
+<p>其实上面的代码已经解释完了。那么你可能会有疑问：没看到哪里有启动的代码，怎么界面 就自动变了呢？</p>
+<p>这是因为 Avalon 在装载 <code>avalon.js</code> 时，会当DOM准备好时自动进行渲染的处理，所以简单 情况下，定义好 Model 就可以了。</p>
+<p>如果想看更原始的定义方法，可以是这样的：</p>
+<pre class="prettyprint linenums"><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div ms-controller="hello"&gt;
+&lt;h1&gt;Hello, {{name}}&lt;/h1&gt;
+&lt;/div&gt;
+&lt;script&gt;
+avalon.ready(function() {
+    var model = avalon.define('hello', function(vm){
+        vm.name = 'Avalon';
+    });
+    avalon.scan();
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>不过这样要麻烦得多。</p>
+<h2 id="title_1-9">观看演示代码<a class="anchor" href="#title_1-9">&para;</a></h2>
+<ul>
+<li><a class="inner" href="../demos/hello_avalon.html">演示代码1 demos/hello_avalon.html</a></li>
+<li><a class="inner" href="../demos/hello_avalon_1.html">演示代码2 demos/hello_avalon_1.html</a></li>
+</ul>
+
+        
+        <div class="ui blue inverted small label">
+            <i class="icon download"></i><a href="./hello_avalon.md">View Source</a>
+        </div>
+        <div class="ui blue inverted small label">
+            <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>
+        </div>
+        
+        
+    </div>
+</div>
+
+<div class="ui page grid">
+    <div class="column">
+    <!-- disqus -->
+    
+        <div id="disqus_thread" style="margin:20px;"></div>
+ <script type="text/javascript">
+     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+     var disqus_shortname = 'avalonlearning'; // required: replace example with your forum shortname
+
+     /* * * DON'T EDIT BELOW THIS LINE * * */
+     (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+ </script>
+ <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+ <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    </div>
+</div>
+
+<div class="ui page grid" id="footer">
+    <div class="column">
+    
+<p>Designed by Limodou, Copyright 2014, Limodou</p>
+<p>CSS framework <a href="https://github.com/twitter/bootstrap">Bootstrap</a>, Markdown parser lib <a href="https://github.com/limodou/par">Par</a> and this page is created by <a href="https://github.com/limodou/parm">Parm</a> tool.</p>
+
+    </div>
+</div>
+
+
+<script>
+var relpath = '.';
+</script>
+
+<script type="text/javascript" src="./static/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="./static/semantic/javascript/semantic.min.js"></script>
+<script src="./static/asset/prettify.js"></script>
+<script src="./static/toc/toc.js"></script>
+<script src="./static/jquery.ui.totop.js"></script>
+<script src="./static/jquery.hotkeys.js"></script>
+<script src="./static/jquery.sticky-kit.min.js"></script>
+<script src="./static/docs.js"></script>
+<script src="./static/comment.js"></script>
+
+
+    <script type="text/javascript">
+   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+   var disqus_shortname = 'avalonlearning'; // required: replace example with your forum shortname
+
+   /* * * DON'T EDIT BELOW THIS LINE * * */
+   (function () {
+       var s = document.createElement('script'); s.async = true;
+       s.type = 'text/javascript';
+       s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+       (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+   }());
+   </script>
+
+
+
+
+    
+<script type="text/javascript">
+$(function(){
+    var form = $('#searchform');
+    form.submit(function(e){
+        e.preventDefault();
+        var wq=$('input[name="q"]').val();
+        var link="http://www.google.com/search?q=site:limodou.github.io/avalon-learning/zh_CN "+wq;
+        window.open(link);
+
+    });
+});
+</script>
+
+
+
+<script>
+$(function(){
+    $('.navbar .ui.dropdown').dropdown({
+        on: 'hover'
+    });
+    $('a.language').on('click', function(){
+        $.cookie('language', $(this).data('lang'), { expires: 360, path: '/' });
+        window.location.href = "./../"+$(this).data('lang')+'/index.html';
+    });
+});
+</script>
+</body>
+</html>

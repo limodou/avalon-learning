@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link rel="stylesheet" href="./static/semantic/css/semantic.min.css"/>
+<link href="./static/asset/prettify.css" rel="stylesheet">
+<link href="./static/toc/toc.css" rel="stylesheet">
+<link rel="stylesheet" href="./static/parm.css"/>
+<link rel="stylesheet" href="./static/asset/sons-of-obsidian.css"/>
+<link rel="stylesheet" href="./static/ui.totop.css"/>
+
+<title>事件处理-删除操作 - Avalon Learning</title>
+</head>
+<body>
+
+
+
+<!-- Navbar
+================================================== -->
+<div class="navbar">
+  <div class="ui small secondary inverted borderless menu">
+    
+    <a class="active item" href="./index.html">Home</a>
+    
+    <div class="right menu">
+      
+        
+<div class="item">
+  <div class="ui icon input">
+    <form id="searchform">
+    <input name="q" type="text" placeholder="Search...">
+    </form>
+  </div>
+</div>
+
+      
+      <div class="ui dropdown item">
+        Select Languages <i class="icon dropdown"></i>
+        <div class="menu">
+          <!--<a class="item language" href="#" data-lang="en">English</a>-->
+          <a class="item language" href="#" data-lang="zh_CN">中文</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="ui divided grid">
+    <div class="four wide column" id="side-bar">
+        <div id="toc" class="content"></div>
+    </div> 
+    
+    <div class="twelve wide column" id="markdown-content">
+    
+        <div class="chapter-prev chapter-top">
+    <a prev-chapter href="./watch.html"><i class="icon-arrow-left"></i> 使用 $watch 监视变化</a>
+</div>
+<div class="chapter-next chapter-top">
+    <a next-chapter href="./duplex.html">双向绑定-添加操作 <i class="icon-arrow-right"></i></a>
+</div>
+        
+        <h1 id="title_1">事件处理-删除操作<a class="anchor" href="#title_1">&para;</a></h1>
+<h2 id="title_1-1">需求描述<a class="anchor" href="#title_1-1">&para;</a></h2>
+<p>有时我们会发现，评论的内容属于垃圾信息，因此需要将其删除。因此，我希望在查看评论 时，有一个删除的链接，点击后可以让我把它删除。</p>
+<p>这个需求比较简单，删除标签在前面已经有了，所以可以直接使用。在删除后，因为评论条 数变化，所以应该两个显示都发生变化，一会我们看随后的结果是不是正确。</p>
+<h2 id="title_1-2">ms-click<a class="anchor" href="#title_1-2">&para;</a></h2>
+<p>Avalon 中提供了大量的事件响应处理的属性，其中 <code>ms-click</code> 就是用来处理点击的属性。 我们修改：</p>
+<pre class="prettyprint "><code>&lt;a class="delete"&gt;Delete&lt;/a&gt;</code></pre>
+<p>为:</p>
+<pre class="prettyprint linenums"><code>...
+          &lt;a class="delete" ms-click="remove(el)"&gt;Delete&lt;/a&gt;
+...</code></pre>
+
+<p>在 <code>ms-click</code> 后面是一个回调函数 <code>remove</code> 。如果这个回调没有参数，则可以不带括号。如果带 参数则传入相应的参数即可。这里传入了循环变量 <code>el</code> 。</p>
+<div class="ui warning message">
+<p>请注意，函数命名不要使用关键字，如 <code>delete</code> 等，否则会冲突。</p>
+
+</div>
+<h2 id="title_1-3">定义回调<a class="anchor" href="#title_1-3">&para;</a></h2>
+<p>然后让我们在 <code>comments</code> Model 中定义对应的 <code>remove</code> 函数，如：</p>
+<pre class="prettyprint linenums"><code>...
+    //begin of remove
+    vm.remove = function(el){
+        vm.comments.remove(el);
+    }
+    //end of remove
+...</code></pre>
+
+<p>这个处理很简单。注意，Avalon对数据对象扩展了很多方法，这里可以直接调用 <code>comments</code>  的 <code>remove</code> 方法，它需要的不是索引值，而是元素本身。如果要删除指定的索引元素，可以 使用 <code>removeAt(index)</code> 方法。</p>
+<h2 id="title_1-4">另一种删除方法<a class="anchor" href="#title_1-4">&para;</a></h2>
+<p>作者司徒正美对于删除操作，又给了另一种做法，就是使用 <code>$remove</code> ，这个是 <code>ms-repeat</code> 在渲染时自动生成的，可以用来删除当前项。因此我们按这种办法修改一下：</p>
+<h3 id="title_1-4-1">页面调整<a class="anchor" href="#title_1-4-1">&para;</a></h3>
+<p>将页面删除的事件，修改为：</p>
+<pre class="prettyprint linenums"><code>...
+        &lt;!-- delete action begin --&gt;
+        &lt;div class="actions"&gt;
+          &lt;a class="delete" ms-click="remove($remove)"&gt;Delete&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;!-- delete action end --&gt;
+...</code></pre>
+
+<p>这里， <code>remove()</code> 函数的参数改为了 <code>$remove</code></p>
+<h3 id="title_1-4-2">Model 代码调整<a class="anchor" href="#title_1-4-2">&para;</a></h3>
+<p>将 <code>remove</code> 的代码调整一下：</p>
+<pre class="prettyprint linenums"><code>...
+    //begin of remove
+    vm.remove = function(rm){
+        rm();
+    }
+    //end of remove
+...</code></pre>
+
+<p>参数改为 <code>rm</code> 方便理解。然后调用 <code>rm()</code> 删除即可。更简单方便。</p>
+<h2 id="title_1-5">观看演示代码<a class="anchor" href="#title_1-5">&para;</a></h2>
+<ul>
+<li><a class="inner" href="../demos/event.html">演示代码1 demos/event.html</a></li>
+<li><a class="inner" href="../demos/event_1.html">演示代码2 demos/event_1.html</a></li>
+</ul>
+<h2 id="title_1-6">参考文档<a class="anchor" href="#title_1-6">&para;</a></h2>
+<ul>
+<li><a class="outter" href="http://www.cnblogs.com/rubylouvre/p/3181291.html#top10">ms-click</a></li>
+</ul>
+
+        
+        <div class="ui blue inverted small label">
+            <i class="icon download"></i><a href="./event.md">View Source</a>
+        </div>
+        <div class="ui blue inverted small label">
+            <i class="icon help link" data-html="<b>&larr;</b> Prev Chapter <b>&rarr;</b> Next Chapter<br/><b>h</b> Index Page"></i>
+        </div>
+        
+        
+    </div>
+</div>
+
+<div class="ui page grid">
+    <div class="column">
+    <!-- disqus -->
+    
+        <div id="disqus_thread" style="margin:20px;"></div>
+ <script type="text/javascript">
+     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+     var disqus_shortname = 'avalonlearning'; // required: replace example with your forum shortname
+
+     /* * * DON'T EDIT BELOW THIS LINE * * */
+     (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+ </script>
+ <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+ <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    </div>
+</div>
+
+<div class="ui page grid" id="footer">
+    <div class="column">
+    
+<p>Designed by Limodou, Copyright 2014, Limodou</p>
+<p>CSS framework <a href="https://github.com/twitter/bootstrap">Bootstrap</a>, Markdown parser lib <a href="https://github.com/limodou/par">Par</a> and this page is created by <a href="https://github.com/limodou/parm">Parm</a> tool.</p>
+
+    </div>
+</div>
+
+
+<script>
+var relpath = '.';
+</script>
+
+<script type="text/javascript" src="./static/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="./static/semantic/javascript/semantic.min.js"></script>
+<script src="./static/asset/prettify.js"></script>
+<script src="./static/toc/toc.js"></script>
+<script src="./static/jquery.ui.totop.js"></script>
+<script src="./static/jquery.hotkeys.js"></script>
+<script src="./static/jquery.sticky-kit.min.js"></script>
+<script src="./static/docs.js"></script>
+<script src="./static/comment.js"></script>
+
+
+    <script type="text/javascript">
+   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+   var disqus_shortname = 'avalonlearning'; // required: replace example with your forum shortname
+
+   /* * * DON'T EDIT BELOW THIS LINE * * */
+   (function () {
+       var s = document.createElement('script'); s.async = true;
+       s.type = 'text/javascript';
+       s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+       (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+   }());
+   </script>
+
+
+
+
+    
+<script type="text/javascript">
+$(function(){
+    var form = $('#searchform');
+    form.submit(function(e){
+        e.preventDefault();
+        var wq=$('input[name="q"]').val();
+        var link="http://www.google.com/search?q=site:limodou.github.io/avalon-learning/zh_CN "+wq;
+        window.open(link);
+
+    });
+});
+</script>
+
+
+
+<script>
+$(function(){
+    $('.navbar .ui.dropdown').dropdown({
+        on: 'hover'
+    });
+    $('a.language').on('click', function(){
+        $.cookie('language', $(this).data('lang'), { expires: 360, path: '/' });
+        window.location.href = "./../"+$(this).data('lang')+'/index.html';
+    });
+});
+</script>
+</body>
+</html>
